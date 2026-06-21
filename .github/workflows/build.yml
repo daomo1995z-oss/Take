@@ -1,0 +1,21 @@
+name: Pack PowerShell to EXE
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install PS2EXE and Compile
+        shell: powershell
+        run: |
+          Install-Module -Name ps2exe -Force -Scope CurrentUser
+          ps2exe -inputFile "Takephoto.ps1" -outputFile "Space_Screenshot_Tool.exe" -noConsole
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Executable-File
+          path: Space_Screenshot_Tool.exe
